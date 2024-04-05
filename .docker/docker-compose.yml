@@ -2,7 +2,13 @@ version: '3.9'
 name: faculty-hours-faculty
 services:
   web:
-
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql_psycopg2
+      - DB_HOST=fh-app-faculty-db
+      - DB_DB=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_PORT=5432
     build:
       context: ..
       dockerfile: ./.docker/Dockerfile
@@ -13,8 +19,28 @@ services:
     networks:
       - faculty_network
       - common_network
+  db:
+    image: postgres:13
+    container_name: "fh-app-faculty-db"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: pg_isready -U postgres -d postgres
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/:Z
+    expose:
+      - 5432
+    networks:
+      - faculty_network
 networks:
   faculty_network:
     driver: bridge
   common_network:
     external: true
+volumes:
+  postgres_data:
