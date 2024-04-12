@@ -38,3 +38,11 @@ class Exercise(BaseModel):
 
 class Teachers(BaseModel):
     teachers: list[Teacher]
+
+
+class Lectures(BaseModel):
+    lectures: list[Lecture]
+
+
+class Exercises(BaseModel):
+    exercises: list[Exercise]

@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey  # noqa
-from sqlalchemy import TIMESTAMP, Column, Computed, Integer, String, text
+from sqlalchemy import TIMESTAMP, Column, Integer, String, text
 
 from .database import Base
 
@@ -38,7 +38,7 @@ class Lecture(Base):
     semester = Column(Integer)
     hours_lectures = Column(Integer, server_default="30")
     groups_lectures = Column(Integer, server_default="1", nullable=True)
-    sum_lectures_hours = Column(Integer, Computed("hours_lectures * groups_lectures"))
+    sum_lectures_hours = Column(Integer)
     teacher_id = Column(Integer, ForeignKey("teachers.id"))
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
@@ -63,9 +63,7 @@ class Exercise(Base):
     semester = Column(Integer)
     hours_exercises = Column(Integer, server_default="30")
     groups_exercises = Column(Integer, server_default="1", nullable=True)
-    sum_exercises_hours = Column(
-        Integer, Computed("hours_exercises * groups_exercises")
-    )
+    sum_exercises_hours = Column(Integer)
     teacher_id = Column(Integer, ForeignKey("teachers.id"))
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
