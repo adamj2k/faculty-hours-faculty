@@ -3,7 +3,7 @@ name: faculty-hours-faculty
 services:
   web:
     environment:
-      - DB_ENGINE=django.db.backends.postgresql_psycopg2
+      - DB_ENGINE=postgresql
       - DB_HOST=fh-app-faculty-db
       - DB_DB=postgres
       - DB_USER=postgres

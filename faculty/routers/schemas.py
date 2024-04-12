@@ -34,3 +34,7 @@ class Exercise(BaseModel):
     @computed_field
     def sum_exercises_hours(self) -> int:
         return self.hours_exercises * self.groups_exercises
+
+
+class Teachers(BaseModel):
+    teachers: list[Teacher]

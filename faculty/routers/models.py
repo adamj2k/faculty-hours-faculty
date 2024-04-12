@@ -5,6 +5,11 @@ from .database import Base
 
 
 class Teacher(Base):
+    """
+    Class Teacher representing a teacher with:
+    - id, name, last_name and email.
+    """
+
     __tablename__ = "teachers"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -20,6 +25,11 @@ class Teacher(Base):
 
 
 class Lecture(Base):
+    """
+    Class Lecture representing a lecture with his name, number of hours,
+    groups and study year. Has relation with class Teacher.
+    """
+
     __tablename__ = "lectures"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -39,6 +49,12 @@ class Lecture(Base):
 
 
 class Exercise(Base):
+    """
+    Class Exercises representing an exercise with his name, number of hours,
+    number of groups and calculation sum of hours of all groups.
+    Has many to many relation with class Teacher.
+    """
+
     __tablename__ = "exercises"
 
     id = Column(Integer, primary_key=True, nullable=False)
