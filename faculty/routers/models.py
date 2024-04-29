@@ -1,7 +1,18 @@
 from sqlalchemy import ForeignKey  # noqa
-from sqlalchemy import TIMESTAMP, Column, Integer, String, text
+from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 from .database import Base
+
+Base = declarative_base()
+
+association_table_exercise_teacher = Table(
+    "association_exercise_teacher",
+    Base.metadata,
+    Column("teacher_id", Integer, ForeignKey("teachers.id")),
+    Column("exercise_id", Integer, ForeignKey("exercises.id")),
+)
 
 
 class Teacher(Base):
@@ -21,6 +32,11 @@ class Teacher(Base):
     )
     updated_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+    exercise = relationship(
+        "Exercise",
+        secondary=association_table_exercise_teacher,
+        back_populates="teacher",
     )
 
 
@@ -70,4 +86,9 @@ class Exercise(Base):
     )
     updated_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
+    teacher = relationship(
+        "Teacher",
+        secondary=association_table_exercise_teacher,
+        back_populates="exercise",
     )

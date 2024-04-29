@@ -36,13 +36,13 @@ class Exercise(BaseModel):
         return self.hours_exercises * self.groups_exercises
 
 
-class Teachers(BaseModel):
+class Teachers(Teacher):
     teachers: list[Teacher]
 
 
-class Lectures(BaseModel):
+class Lectures(Lecture):
     lectures: list[Lecture]
 
 
-class Exercises(BaseModel):
+class Exercises(Exercise):
     exercises: list[Exercise]
