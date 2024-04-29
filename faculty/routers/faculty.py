@@ -11,7 +11,7 @@ models.Base.metadata.create_all(bind=engine)
 
 
 @router.get("/teacher/{id}", response_model=Teacher)
-def get_teacher(id: int, db: Session = Depends(get_db)):
+async def get_teacher(id: int, db: Session = Depends(get_db)):
     """
     Retrieves a teacher from the database by ID.
 
@@ -35,9 +35,11 @@ async def get_teachers(db: Session = Depends(get_db)):
     return {"teachers": all_teachers}
 
 
-@router.post("/create-teacher")
-def create_teacher(teacher: Teacher, db: Session = Depends(get_db)):
-    new_teacher = models.Teacher(**teacher.model_dump())
+@router.post(
+    "/create-teacher", status_code=status.HTTP_201_CREATED, response_model=Teacher
+)
+async def create_teacher(teacher_data: Teacher, db: Session = Depends(get_db)):
+    new_teacher = models.Teacher(**teacher_data.model_dump())
     db.add(new_teacher)
     db.commit()
     db.refresh(new_teacher)
@@ -46,7 +48,7 @@ def create_teacher(teacher: Teacher, db: Session = Depends(get_db)):
 
 
 @router.delete("/delete-teacher/{id}")
-def delete_teacher(
+async def delete_teacher(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
 ):
     delete_teacher = db.query(models.Teacher).filter(models.Teacher.id == id)
@@ -61,8 +63,8 @@ def delete_teacher(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/update-teacher/{id}")
-def update_teacher(id: int, teacher: Teacher, db: Session = Depends(get_db)):
+@router.put("/update-teacher/{id}", response_model=Teacher)
+async def update_teacher(id: int, teacher: Teacher, db: Session = Depends(get_db)):
     update_teacher = db.query(models.Teacher).filter(models.Teacher.id == id)
     update_teacher.first()
     if update_teacher == None:
@@ -77,7 +79,7 @@ def update_teacher(id: int, teacher: Teacher, db: Session = Depends(get_db)):
 
 
 @router.get("/lecture/{id}", response_model=Lecture)
-def get_lecture(id: int, db: Session = Depends(get_db)):
+async def get_lecture(id: int, db: Session = Depends(get_db)):
     lecture = db.query(models.Lecture).filter(models.Lecture.id == id).first()
     if lecture == None:
         raise HTTPException(
@@ -92,8 +94,10 @@ async def get_lectures(db: Session = Depends(get_db)):
     return {"lectures": all_lectures}
 
 
-@router.post("/create-lecture")
-def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
+@router.post(
+    "/create-lecture", status_code=status.HTTP_201_CREATED, response_model=Lecture
+)
+async def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
     new_lecture = models.Lecture(**lecture.model_dump())
     db.add(new_lecture)
     db.commit()
@@ -119,7 +123,7 @@ async def delete_lecture(
 
 
 @router.get("/exercise/{id}", response_model=Exercise)
-def get_exercise(id: int, db: Session = Depends(get_db)):
+async def get_exercise(id: int, db: Session = Depends(get_db)):
     exercise = db.query(models.Exercise).filter(models.Exercise.id == id).first()
     if exercise == None:
         raise HTTPException(
@@ -129,13 +133,15 @@ def get_exercise(id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/exercises", response_model=Exercises)
-def get_exercises(db: Session = Depends(get_db)):
+async def get_exercises(db: Session = Depends(get_db)):
     all_exercises = db.query(models.Exercise).all()
     return {"exercises": all_exercises}
 
 
-@router.post("/create-exercise")
-def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
+@router.post(
+    "/create-exercise", status_code=status.HTTP_201_CREATED, response_model=Exercise
+)
+async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     new_exercise = models.Exercise(**exercise.model_dump())
     db.add(new_exercise)
     db.commit()
@@ -145,7 +151,7 @@ def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
 
 
 @router.delete("/delete-exercise/{id}")
-def delete_exercise(
+async def delete_exercise(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
 ):
     delete_exercise = db.query(models.Exercise).filter(models.Exercise.id == id)
