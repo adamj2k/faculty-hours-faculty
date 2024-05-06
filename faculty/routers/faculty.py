@@ -47,6 +47,7 @@ async def create_teacher(teacher_data: Teacher, db: Session = Depends(get_db)):
     return new_teacher
 
 
+
 @router.delete("/teacher/delete/{id}")
 async def delete_teacher(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
@@ -148,6 +149,7 @@ async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     db.refresh(new_exercise)
 
     return new_exercise
+
 
 
 @router.delete("/exercise/delete/{id}")
