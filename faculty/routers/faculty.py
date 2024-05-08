@@ -36,7 +36,7 @@ async def get_teachers(db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/create-teacher", status_code=status.HTTP_201_CREATED, response_model=Teacher
+    "/teacher/create", status_code=status.HTTP_201_CREATED, response_model=Teacher
 )
 async def create_teacher(teacher_data: Teacher, db: Session = Depends(get_db)):
     new_teacher = models.Teacher(**teacher_data.model_dump())
@@ -47,7 +47,8 @@ async def create_teacher(teacher_data: Teacher, db: Session = Depends(get_db)):
     return new_teacher
 
 
-@router.delete("/delete-teacher/{id}")
+
+@router.delete("/teacher/delete/{id}")
 async def delete_teacher(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
 ):
@@ -63,7 +64,7 @@ async def delete_teacher(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/update-teacher/{id}", response_model=Teacher)
+@router.put("/teacher/update/{id}", response_model=Teacher)
 async def update_teacher(id: int, teacher: Teacher, db: Session = Depends(get_db)):
     update_teacher = db.query(models.Teacher).filter(models.Teacher.id == id)
     update_teacher.first()
@@ -95,7 +96,7 @@ async def get_lectures(db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/create-lecture", status_code=status.HTTP_201_CREATED, response_model=Lecture
+    "/lecture/create", status_code=status.HTTP_201_CREATED, response_model=Lecture
 )
 async def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
     new_lecture = models.Lecture(**lecture.model_dump())
@@ -106,7 +107,7 @@ async def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
     return new_lecture
 
 
-@router.delete("/delete-lecture/{id}")
+@router.delete("/lecture/delete/{id}")
 async def delete_lecture(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
 ):
@@ -139,7 +140,7 @@ async def get_exercises(db: Session = Depends(get_db)):
 
 
 @router.post(
-    "/create-exercise", status_code=status.HTTP_201_CREATED, response_model=Exercise
+    "/exercise/create", status_code=status.HTTP_201_CREATED, response_model=Exercise
 )
 async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     new_exercise = models.Exercise(**exercise.model_dump())
@@ -150,7 +151,8 @@ async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     return new_exercise
 
 
-@router.delete("/delete-exercise/{id}")
+
+@router.delete("/exercise/delete/{id}")
 async def delete_exercise(
     id: int, db: Session = Depends(get_db), status_code=status.HTTP_204_NO_CONTENT
 ):
