@@ -3,7 +3,16 @@ from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from faculty.routers.database import Base
+
+Base = declarative_base()
+
+association_table_exercise_teacher = Table(
+    "association_exercise_teacher",
+    Base.metadata,
+    Column("teacher_id", Integer, ForeignKey("teachers.id")),
+    Column("exercise_id", Integer, ForeignKey("exercises.id")),
+)
 
 Base = declarative_base()
 

@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel, EmailStr, Field, computed_field
 
 
@@ -8,8 +10,9 @@ class Teacher(BaseModel):
     email: EmailStr
 
 
-class Teachers(Teacher):
-    teachers: list[Teacher]
+
+class ListTeachers(BaseModel):
+    teachers: List[Teacher]
 
 
 class TeacherResponse(BaseModel):
@@ -30,7 +33,7 @@ class Lecture(BaseModel):
         return self.hours_lectures * self.groups_lectures
 
 
-class Lectures(Lecture):
+class ListLectures(BaseModel):
     lectures: list[Lecture]
 
 
@@ -52,7 +55,7 @@ class Exercise(BaseModel):
         return self.hours_exercises * self.groups_exercises
 
 
-class Exercises(BaseModel):
+class ListExercises(BaseModel):
     exercises: list[Exercise]
 
 
