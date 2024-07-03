@@ -14,6 +14,15 @@ association_table_exercise_teacher = Table(
     Column("exercise_id", Integer, ForeignKey("exercises.id")),
 )
 
+Base = declarative_base()
+
+association_table_exercise_teacher = Table(
+    "association_exercise_teacher",
+    Base.metadata,
+    Column("teacher_id", Integer, ForeignKey("teachers.id")),
+    Column("exercise_id", Integer, ForeignKey("exercises.id")),
+)
+
 
 class Teacher(Base):
     """

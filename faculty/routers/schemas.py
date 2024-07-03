@@ -10,6 +10,7 @@ class Teacher(BaseModel):
     email: EmailStr
 
 
+
 class ListTeachers(BaseModel):
     teachers: List[Teacher]
 
