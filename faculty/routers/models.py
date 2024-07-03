@@ -3,7 +3,7 @@ from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from faculty.routers.database import Base
 
 Base = declarative_base()
 

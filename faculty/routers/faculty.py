@@ -1,9 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
+from faculty.routers.database import engine, get_db
+from faculty.routers.schemas import (
+    Exercise,
+    Lecture,
+    ListExercises,
+    ListLectures,
+    ListTeachers,
+    Teacher,
+)
+
 from . import models
-from .database import engine, get_db
-from .schemas import Exercise, Exercises, Lecture, Lectures, Teacher, Teachers
 
 router = APIRouter()
 
@@ -29,7 +37,7 @@ async def get_teacher(id: int, db: Session = Depends(get_db)):
     return teacher
 
 
-@router.get("/teachers", response_model=Teachers)
+@router.get("/teacher/list", response_model=ListTeachers)
 async def get_teachers(db: Session = Depends(get_db)):
     all_teachers = db.query(models.Teacher).all()
     return {"teachers": all_teachers}
@@ -88,7 +96,7 @@ async def get_lecture(id: int, db: Session = Depends(get_db)):
     return lecture
 
 
-@router.get("/lectures", response_model=Lectures)
+@router.get("/lecture/list", response_model=ListLectures)
 async def get_lectures(db: Session = Depends(get_db)):
     all_lectures = db.query(models.Lecture).all()
     return {"lectures": all_lectures}
@@ -132,7 +140,7 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
     return exercise
 
 
-@router.get("/exercises", response_model=Exercises)
+@router.get("/exercises", response_model=ListExercises)
 async def get_exercises(db: Session = Depends(get_db)):
     all_exercises = db.query(models.Exercise).all()
     return {"exercises": all_exercises}
