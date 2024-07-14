@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
+import faculty.routers.models as models
 from faculty.routers.database import engine, get_db
+from faculty.routers.producer import QUEUE_LIST, send_message
 from faculty.routers.schemas import (
     Exercise,
     Lecture,
@@ -10,8 +12,6 @@ from faculty.routers.schemas import (
     ListTeachers,
     Teacher,
 )
-
-from . import models
 
 router = APIRouter()
 
@@ -37,8 +37,17 @@ async def get_teacher(id: int, db: Session = Depends(get_db)):
     return teacher
 
 
-@router.get("/teacher/list", response_model=ListTeachers)
+@router.get("/teacher/list/", response_model=ListTeachers)
 async def get_teachers(db: Session = Depends(get_db)):
+    """
+    Retrieves all teachers from the database.
+
+    **Parameters**:
+    - db: Session, a database session
+
+    **Returns**:
+    - ListTeachers: a list of all teachers retrieved from the database
+    """
     all_teachers = db.query(models.Teacher).all()
     return {"teachers": all_teachers}
 
@@ -51,9 +60,9 @@ async def create_teacher(teacher_data: Teacher, db: Session = Depends(get_db)):
     db.add(new_teacher)
     db.commit()
     db.refresh(new_teacher)
-
+    send_message("create new teacher", QUEUE_LIST[0])
+    send_message("create new teacher", QUEUE_LIST[1], new_teacher.id)
     return new_teacher
-
 
 
 @router.delete("/teacher/delete/{id}")
@@ -69,6 +78,7 @@ async def delete_teacher(
     else:
         delete_teacher.delete(synchronize_session=False)
         db.commit()
+        # send_message("delete teacher", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -84,6 +94,8 @@ async def update_teacher(id: int, teacher: Teacher, db: Session = Depends(get_db
     else:
         update_teacher.update(teacher.model_dump(), synchronize_session=False)
         db.commit()
+        send_message("update teacher", QUEUE_LIST[0])
+        send_message("update teacher", QUEUE_LIST[1], id)
     return update_teacher.first()
 
 
@@ -97,7 +109,7 @@ async def get_lecture(id: int, db: Session = Depends(get_db)):
     return lecture
 
 
-@router.get("/lecture/list", response_model=ListLectures)
+@router.get("/lecture/list/", response_model=ListLectures)
 async def get_lectures(db: Session = Depends(get_db)):
     all_lectures = db.query(models.Lecture).all()
     return {"lectures": all_lectures}
@@ -111,7 +123,7 @@ async def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
     db.add(new_lecture)
     db.commit()
     db.refresh(new_lecture)
-
+    # send_message("create new lecture", QUEUE_LIST[2])
     return new_lecture
 
 
@@ -128,6 +140,7 @@ async def delete_lecture(
     else:
         delete_lecture.delete(synchronize_session=False)
         db.commit()
+        # send_message("create new lecture", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -141,8 +154,7 @@ async def get_exercise(id: int, db: Session = Depends(get_db)):
     return exercise
 
 
-
-@router.get("/exercises", response_model=ListExercises)
+@router.get("/exercise/list/", response_model=ListExercises)
 async def get_exercises(db: Session = Depends(get_db)):
     all_exercises = db.query(models.Exercise).all()
     return {"exercises": all_exercises}
@@ -156,9 +168,8 @@ async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     db.add(new_exercise)
     db.commit()
     db.refresh(new_exercise)
-
+    # send_message("create new lecture", QUEUE_LIST[2])
     return new_exercise
-
 
 
 @router.delete("/exercise/delete/{id}")
@@ -174,4 +185,5 @@ async def delete_exercise(
     else:
         delete_exercise.delete(synchronize_session=False)
         db.commit()
+        # send_message("create new lecture", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
