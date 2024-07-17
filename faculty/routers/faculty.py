@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-import faculty.routers.models as models
-from faculty.routers.database import engine, get_db
-from faculty.routers.producer import QUEUE_LIST, send_message
-from faculty.routers.schemas import (
+import faculty.models as models
+from faculty.models.database import engine, get_db
+from faculty.models.schemas import (
     Exercise,
     Lecture,
     ListExercises,
@@ -12,6 +11,7 @@ from faculty.routers.schemas import (
     ListTeachers,
     Teacher,
 )
+from faculty.services.producer import QUEUE_LIST, send_message
 
 router = APIRouter()
 

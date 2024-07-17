@@ -11,6 +11,7 @@ def send_message(message, queue, teacher_id=None):
     Parameters:
     - message: information about change
     - queue: name of queue - report to generate
+    - teacher_id: id of teacher - default None
     """
     if teacher_id == None:
         channel = declare_queue(queue)
@@ -45,6 +46,8 @@ def producer_connection():
 def declare_queue(queue):
     """
     Declaring queue
+    Parameters:
+    - queue: name of queue
     return channel with declared queue
     """
     channel = producer_connection()
