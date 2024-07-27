@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-import faculty.models as models
+import faculty.models.models as models
 from faculty.models.database import engine, get_db
 from faculty.models.schemas import (
     Exercise,
@@ -78,7 +78,7 @@ async def delete_teacher(
     else:
         delete_teacher.delete(synchronize_session=False)
         db.commit()
-        # send_message("delete teacher", QUEUE_LIST[2])
+        send_message("delete teacher", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -123,7 +123,7 @@ async def create_lecture(lecture: Lecture, db: Session = Depends(get_db)):
     db.add(new_lecture)
     db.commit()
     db.refresh(new_lecture)
-    # send_message("create new lecture", QUEUE_LIST[2])
+    send_message("create new lecture", QUEUE_LIST[2])
     return new_lecture
 
 
@@ -140,7 +140,7 @@ async def delete_lecture(
     else:
         delete_lecture.delete(synchronize_session=False)
         db.commit()
-        # send_message("create new lecture", QUEUE_LIST[2])
+        send_message("create new lecture", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
@@ -168,7 +168,7 @@ async def create_exercise(exercise: Exercise, db: Session = Depends(get_db)):
     db.add(new_exercise)
     db.commit()
     db.refresh(new_exercise)
-    # send_message("create new lecture", QUEUE_LIST[2])
+    send_message("create new lecture", QUEUE_LIST[2])
     return new_exercise
 
 
@@ -185,5 +185,5 @@ async def delete_exercise(
     else:
         delete_exercise.delete(synchronize_session=False)
         db.commit()
-        # send_message("create new lecture", QUEUE_LIST[2])
+        send_message("create new lecture", QUEUE_LIST[2])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
