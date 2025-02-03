@@ -1,9 +1,12 @@
 [tool.poetry]
-name = "faculty-hours-faculty"
+name = "fh-faculty"
 version = "0.1.0"
-description = ""
+description = "faculty service"
 authors = ["Adam <adamjawor@gmail.com>"]
 readme = "README.md"
+packages = [
+    { include = "faculty" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
