@@ -1,20 +1,7 @@
-from sqlalchemy import ForeignKey  # noqa
-from sqlalchemy import TIMESTAMP, Column, Integer, String, Table, text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, Integer, String, Table, func
 from sqlalchemy.orm import relationship
 
 from faculty.models.database import Base
-
-Base = declarative_base()
-
-association_table_exercise_teacher = Table(
-    "association_exercise_teacher",
-    Base.metadata,
-    Column("teacher_id", Integer, ForeignKey("teachers.id")),
-    Column("exercise_id", Integer, ForeignKey("exercises.id")),
-)
-
-Base = declarative_base()
 
 association_table_exercise_teacher = Table(
     "association_exercise_teacher",
@@ -27,7 +14,7 @@ association_table_exercise_teacher = Table(
 class Teacher(Base):
     """
     Class Teacher representing a teacher with:
-    - id, name, last_name and email.
+    - id, first_name, last_name and email.
     """
 
     __tablename__ = "teachers"
@@ -37,10 +24,13 @@ class Teacher(Base):
     last_name = Column(String)
     email = Column(String)
     created_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP, server_default=func.current_timestamp(), nullable=False
     )
     updated_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+        nullable=False,
     )
     exercise = relationship(
         "Exercise",
@@ -66,10 +56,13 @@ class Lecture(Base):
     sum_lectures_hours = Column(Integer)
     teacher_id = Column(Integer, ForeignKey("teachers.id"))
     created_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP, server_default=func.current_timestamp(), nullable=False
     )
     updated_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+        nullable=False,
     )
 
 
@@ -91,10 +84,13 @@ class Exercise(Base):
     sum_exercises_hours = Column(Integer)
     teacher_id = Column(Integer, ForeignKey("teachers.id"))
     created_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP, server_default=func.current_timestamp(), nullable=False
     )
     updated_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+        nullable=False,
     )
     teacher = relationship(
         "Teacher",

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 import faculty.models.models as models
-from faculty.models.database import engine, get_db
+from faculty.models.database import get_db
 from faculty.models.schemas import (
     Exercise,
     Lecture,
@@ -14,8 +14,6 @@ from faculty.models.schemas import (
 from faculty.services.producer import QUEUE_LIST, send_message
 
 router = APIRouter()
-
-models.Base.metadata.create_all(bind=engine)
 
 
 @router.get("/teacher/{id}", response_model=Teacher)
